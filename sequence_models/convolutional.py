@@ -337,9 +337,13 @@ class ByteNetLM(nn.Module):
                  padding_idx=None, causal=False, dropout=0.0, final_ln=False, slim=True, activation='relu',
                  tie_weights=False, down_embed=True):
         super().__init__()
+
+        # encoder
         self.embedder = ByteNet(n_tokens, d_embedding, d_model, n_layers, kernel_size, r,
                                 padding_idx=padding_idx, causal=causal, dropout=dropout, down_embed=down_embed,
                                 slim=slim, activation=activation, rank=rank, n_frozen_embs=n_frozen_embs)
+
+        # decoder
         if tie_weights:
             self.decoder = nn.Linear(d_model, n_tokens, bias=False)
             self.decoder.weight = self.embedder.embedder.weight
@@ -351,6 +355,9 @@ class ByteNetLM(nn.Module):
             self.last_norm = nn.Identity()
 
     def forward(self, x, input_mask=None):
+        """
+            encode --> layernorm --> decoder
+        """
         e = self.embedder(x, input_mask=input_mask)
         e = self.last_norm(e)
         return self.decoder(e)
