@@ -75,7 +75,7 @@ class MaskedConv2d(nn.Conv2d):
 
 
 class MaskedCausalConv1d(nn.Module):
-    """Masked Causal 1D convolution based on https://github.com/Popgun-Labs/PopGen/. 
+    """Masked Causal 1D convolution based on https://github.com/Popgun-Labs/PopGen/.      [wavenet]
          
          Shape:
             Input: (N, L, in_channels)
