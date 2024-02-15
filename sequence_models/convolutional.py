@@ -378,7 +378,7 @@ class ConditionedByteNetLM(nn.Module):
 
     def forward(self, x, input_mask=None):
         """
-        trivial encoder-decoder
+            trivial encoder-decoder
         """
         e = self.embedder(x, input_mask=input_mask)
         return self.decoder(e)
