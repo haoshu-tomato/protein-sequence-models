@@ -396,8 +396,8 @@ class ConditionedByteNetDecoder(ByteNet):
 
     def _embed(self, inputs):
         x, c = inputs
-        e = self.embedder(x)
-        e = self.up_embedder(e)  # (n, ell, d_model - d_conditioning)
+        e = self.embedder(x)                             # defined in ByteNet
+        e = self.up_embedder(e)                          # (n, ell, d_model - d_conditioning)
         # Concatenate the conditioning
         _, ell = x.shape
         if len(c.shape) == 2:
@@ -405,7 +405,7 @@ class ConditionedByteNetDecoder(ByteNet):
             c_ = torch.repeat_interleave(c, ell, dim=1)  # (n, ell, d_conditioning)
         else:
             c_ = c
-        e = torch.cat([e, c_], dim=2)  # (n, ell, d_model)
+        e = torch.cat([e, c_], dim=2)                    # (n, ell, d_model)
         return e
 
 
