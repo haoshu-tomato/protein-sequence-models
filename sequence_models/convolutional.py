@@ -38,7 +38,7 @@ class MaskedConv1d(nn.Conv1d):
     def forward(self, x, input_mask=None):
         if input_mask is not None:
             x = x * input_mask
-        return super().forward(x.transpose(1, 2)).transpose(1, 2)
+        return super().forward(x.transpose(1, 2)).transpose(1, 2)                                        # super.forward()
 
 
 class MaskedConv2d(nn.Conv2d):
