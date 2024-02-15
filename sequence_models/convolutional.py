@@ -368,12 +368,18 @@ class ConditionedByteNetLM(nn.Module):
     def __init__(self, n_tokens, d_embedding, d_conditioning, d_model, n_layers, kernel_size, r,
                  padding_idx=None, causal=False):
         super().__init__()
+
+        # encoder: causal
         self.embedder = ConditionedByteNetDecoder(n_tokens, d_embedding, d_conditioning,
                                                   d_model, n_layers, kernel_size, r,
                                                   padding_idx=padding_idx, causal=causal)
+        # decoder
         self.decoder = PositionFeedForward(d_model, n_tokens)
 
     def forward(self, x, input_mask=None):
+        """
+        trivial encoder-decoder
+        """
         e = self.embedder(x, input_mask=input_mask)
         return self.decoder(e)
 
