@@ -231,14 +231,14 @@ class ByteNetBlock(nn.Module):
         layers1 = [
             nn.LayerNorm(d_in),
             act(),                                            # relu or gelu
-            PositionFeedForward(d_in, d_h, rank=rank),
+            PositionFeedForward(d_in, d_h, rank=rank),        # 1x1 conv
             nn.LayerNorm(d_h),
             act()
         ]
         layers2 = [
             nn.LayerNorm(d_h),
             act(),
-            PositionFeedForward(d_h, d_out, rank=rank),
+            PositionFeedForward(d_h, d_out, rank=rank),       # 1x1 conv
         ]
         self.sequence1 = nn.Sequential(*layers1)
         self.sequence2 = nn.Sequential(*layers2)
