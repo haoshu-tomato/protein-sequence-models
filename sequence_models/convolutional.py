@@ -212,6 +212,10 @@ class ByteNetBlock(nn.Module):
             input_mask: (N, L, 1), optional
             Output: (N, L, d_out)
 
+        Usage:
+            ByteNetBlock(d_model, d_h, d_model, kernel_size, dilation=d, causal=causal, rank=rank,
+                         activation=activation)
+
     """
 
     def __init__(self, d_in, d_h, d_out, kernel_size, dilation=1, groups=1, causal=False, activation='relu', rank=None):
@@ -226,7 +230,7 @@ class ByteNetBlock(nn.Module):
             act = nn.GELU
         layers1 = [
             nn.LayerNorm(d_in),
-            act(),
+            act(),                                            # relu or gelu
             PositionFeedForward(d_in, d_h, rank=rank),
             nn.LayerNorm(d_h),
             act()
@@ -266,10 +270,10 @@ class ByteNet(nn.Module):
         """
         :param n_tokens: number of tokens in token dictionary
         :param d_embedding: dimension of embedding
-        :param d_model: dimension to use within ByteNet model, //2 every layer
-        :param n_layers: number of layers of ByteNet block
-        :param kernel_size: the kernel width
-        :param r: used to calculate dilation factor
+        :param d_model: dimension to use within ByteNet model, //2 every layer                                # d_model = 256
+        :param n_layers: number of layers of ByteNet block, e.g. 32
+        :param kernel_size: the kernel width, e.g. 3*3 
+        :param r: used to calculate dilation factor, typically 128
         :padding_idx: location of padding token in ordered alphabet
         :param causal: if True, chooses MaskedCausalConv1d() over MaskedConv1d()
         :param rank: rank of compressed weight matrices
@@ -295,7 +299,7 @@ class ByteNet(nn.Module):
         log2 = int(np.log2(r)) + 1
         dilations = [2 ** (n % log2) for n in range(n_layers)]
         d_h = d_model
-        if slim:
+        if slim:                    # slim model
             d_h = d_h // 2
         layers = [
             ByteNetBlock(d_model, d_h, d_model, kernel_size, dilation=d, causal=causal, rank=rank,
