@@ -20,7 +20,7 @@ class RobertaLMHead(nn.Module):
     def forward(self, features):
         x = self.dense(features)
         x = F.gelu(x)
-        x = self.layer_norm(x)
+        x = self.layer_norm(x)                            # gelu then layer norm?
         # project back to size of vocabulary with bias
         x = F.linear(x, self.weight) + self.bias
         return x
