@@ -269,7 +269,7 @@ class ByteNet(nn.Module):
                  padding_idx=None, causal=False, dropout=0.0, slim=True, activation='relu', down_embed=True):
         """
         :param n_tokens: number of tokens in token dictionary
-        :param d_embedding: dimension of embedding
+        :param d_embedding: dimension of embedding                                                            # d_embedding = 1280
         :param d_model: dimension to use within ByteNet model, //2 every layer                                # d_model = 256
         :param n_layers: number of layers of ByteNet block, e.g. 32
         :param kernel_size: the kernel width, e.g. 3*3 
