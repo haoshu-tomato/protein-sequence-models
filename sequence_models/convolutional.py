@@ -234,12 +234,12 @@ class ByteNetBlock(nn.Module):
             PositionFeedForward(d_in, d_h, rank=rank),        # 1x1 conv
             nn.LayerNorm(d_h),
             act()
-        ]
+        ]                                                    # d_in --> d_h
         layers2 = [
             nn.LayerNorm(d_h),
             act(),
             PositionFeedForward(d_h, d_out, rank=rank),       # 1x1 conv
-        ]
+        ]                                                     # d_h --> d_out
         self.sequence1 = nn.Sequential(*layers1)
         self.sequence2 = nn.Sequential(*layers2)
 
@@ -251,7 +251,7 @@ class ByteNetBlock(nn.Module):
         """
         return x + self.sequence2(
             self.conv(self.sequence1(x), input_mask=input_mask)
-        )
+        )                                                            # residual connection, d_in = d_out ? = d_model = 256?
 
 
 class ByteNet(nn.Module):
