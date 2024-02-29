@@ -30,7 +30,7 @@ class DoubleEmbedding(nn.Module):
         self.embedding_dim = embedding_dim
         self.trainable = nn.Embedding(n_trainable, embedding_dim, padding_idx=train_padding_idx)
         self.frozen = nn.Embedding(n_frozen, embedding_dim, padding_idx=freeze_padding_idx)
-        self.frozen.weight.requires_grad = False
+        self.frozen.weight.requires_grad = False            # hence freeze!!                         
 
     def forward(self, idx):
         i = torch.where(idx < self.n_trainable)
