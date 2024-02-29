@@ -292,19 +292,19 @@ class ByteNet(nn.Module):
         else:
             self.embedder = nn.Identity()
             
-        if down_embed:
+        if down_embed:                                                             # (default) down_embed = True !!!
             self.up_embedder = PositionFeedForward(d_embedding, d_model)
         else:
             self.up_embedder = nn.Identity()
             assert n_tokens == d_embedding
         log2 = int(np.log2(r)) + 1
         dilations = [2 ** (n % log2) for n in range(n_layers)]
-        d_h = d_model
+        d_h = d_model               # d_model = 256
         if slim:                    # slim model
             d_h = d_h // 2
         layers = [
-            ByteNetBlock(d_model, d_h, d_model, kernel_size, dilation=d, causal=causal, rank=rank,
-                         activation=activation)
+            ByteNetBlock(d_model, d_h, d_model, kernel_size, dilation=d, causal=causal, rank=rank,       
+                         activation=activation)                                                                # ByteNetBlock(d_in, d_h, d_out, xxx) where d_in = d_out = d_model = 256
             for d in dilations
         ]
         self.layers = nn.ModuleList(modules=layers)
