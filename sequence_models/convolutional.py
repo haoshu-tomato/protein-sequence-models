@@ -283,6 +283,13 @@ class ByteNet(nn.Module):
         :param down_embed: if True, have lower dimension for initial embedding than in CNN layers
         """
         super().__init__()
+
+        ### -----------------------------------------------------------
+        """
+            define self.embedder, self.up_embedder
+
+            usage: up_embedder(embedder(e)), then convolve etc.
+        """
         if n_tokens is not None:
             if n_frozen_embs is None:
                 self.embedder = nn.Embedding(n_tokens, d_embedding, padding_idx=padding_idx)
@@ -297,6 +304,8 @@ class ByteNet(nn.Module):
         else:
             self.up_embedder = nn.Identity()
             assert n_tokens == d_embedding
+        ### -----------------------------------------------------------
+                     
         log2 = int(np.log2(r)) + 1
         dilations = [2 ** (n % log2) for n in range(n_layers)]
         d_h = d_model               # d_model = 256
