@@ -213,7 +213,7 @@ class ByteNetBlock(nn.Module):
             Output: (N, L, d_out)
 
         Usage:
-            ByteNetBlock(d_model, d_h, d_model, kernel_size, dilation=d, causal=causal, rank=rank,
+            ByteNetBlock(d_model, d_h(= d_model), d_model, kernel_size, dilation=d, causal=causal, rank=rank,
                          activation=activation)
 
     """
