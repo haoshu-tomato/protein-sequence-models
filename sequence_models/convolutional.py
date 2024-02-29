@@ -348,7 +348,18 @@ class ByteNetLM(nn.Module):
                  tie_weights=False, down_embed=True):
         super().__init__()
 
-        # encoder
+        """
+            encoder
+            Usage:
+                if args.freeze:
+                    with torch.no_grad():
+                        model.embedder.embedder.frozen.weight = torch.nn.Parameter(torch.tensor(esm_embeddings))
+                        torch.save({'model_state_dict': model.state_dict()}, args.out_fpath + 'esm_loaded.tar')
+                if args.pretrain:
+                    with torch.no_grad():
+                        model.embedder.embedder.weight[len(specials) + 1:] = torch.nn.Parameter(torch.tensor(esm_embeddings))
+                        torch.save({'model_state_dict': model.state_dict()}, args.out_fpath + 'esm_loaded.tar')
+        """
         self.embedder = ByteNet(n_tokens, d_embedding, d_model, n_layers, kernel_size, r,
                                 padding_idx=padding_idx, causal=causal, dropout=dropout, down_embed=down_embed,
                                 slim=slim, activation=activation, rank=rank, n_frozen_embs=n_frozen_embs)
