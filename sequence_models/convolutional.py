@@ -291,6 +291,7 @@ class ByteNet(nn.Module):
                                                 d_embedding, padding_idx=padding_idx)
         else:
             self.embedder = nn.Identity()
+            
         if down_embed:
             self.up_embedder = PositionFeedForward(d_embedding, d_model)
         else:
