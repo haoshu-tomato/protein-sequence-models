@@ -288,7 +288,17 @@ class ByteNet(nn.Module):
         """
             define self.embedder, self.up_embedder
 
-            usage: up_embedder(embedder(e)), then convolve etc.
+            usage: 
+                1. up_embedder(embedder(e)), then convolve etc.
+                2. 
+                    if args.freeze:
+                        with torch.no_grad():
+                            model.embedder.embedder.frozen.weight = torch.nn.Parameter(torch.tensor(esm_embeddings))
+                            torch.save({'model_state_dict': model.state_dict()}, args.out_fpath + 'esm_loaded.tar')
+                    if args.pretrain:
+                        with torch.no_grad():
+                            model.embedder.embedder.weight[len(specials) + 1:] = torch.nn.Parameter(torch.tensor(esm_embeddings))
+                            torch.save({'model_state_dict': model.state_dict()}, args.out_fpath + 'esm_loaded.tar')
         """
         if n_tokens is not None:
             if n_frozen_embs is None:
